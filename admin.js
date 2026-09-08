@@ -143,7 +143,7 @@
     const r = await fetch(`${SB_URL}/rest/v1/site_content?key=eq.${encodeURIComponent(key)}`, {
       method:'PATCH', headers:{...headers, Prefer:'return=representation'}, body: JSON.stringify({...body, updated_at: new Date().toISOString()})
     });
-    if(r.ok){ status.textContent='Saved ✓'; setTimeout(()=> status.textContent='', 2000); row.value_text=val; row.media_url=val;
+    if(r.ok){ status.textContent='Saved <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>'; setTimeout(()=> status.textContent='', 2000); row.value_text=val; row.media_url=val;
       // refresh frontend via supabase-content if open in another tab: polling will pick up
     } else { status.textContent='Error '+(await r.text()).slice(0,120); }
   }
@@ -213,7 +213,7 @@
     const image_url = $(`[data-mfield="image_url"][data-id="${id}"]`).value.trim();
     const available = $(`[data-mfield="available"][data-id="${id}"]`).checked;
     const r = await fetch(`${SB_URL}/rest/v1/menu_items?id=eq.${encodeURIComponent(id)}`, {method:'PATCH', headers:{...headers, Prefer:'return=representation'}, body: JSON.stringify({name, price_pence:price, category, description, image_url: image_url||null, available, updated_at: new Date().toISOString()})});
-    if(r.ok){ status.textContent='Saved ✓'; setTimeout(()=>status.textContent='',2000); const row=menuRows.find(x=>x.id===id); Object.assign(row,{name, price_pence:price, category, description, image_url, available}); try{localStorage.setItem('dm-menu-bump',Date.now().toString());}catch{} }
+    if(r.ok){ status.textContent='Saved <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>'; setTimeout(()=>status.textContent='',2000); const row=menuRows.find(x=>x.id===id); Object.assign(row,{name, price_pence:price, category, description, image_url, available}); try{localStorage.setItem('dm-menu-bump',Date.now().toString());}catch{} }
     else status.textContent='Error '+(await r.text()).slice(0,120);
   }
   async function delMenu(id){
@@ -233,7 +233,7 @@
         </div>
         <small>${new Date(o.created_at).toLocaleString('en-GB')} · ${o.customer_email} · ${o.customer_phone||''}</small>
         <p style="margin:8px 0 6px; font-size:13px; color:var(--muted)">${escapeHtml(o.delivery_address||'')}${o.delivery_postcode?' — '+o.delivery_postcode:''}</p>
-        <div style="font-size:13px; margin:8px 0">${(o.items||[]).map(it=> `${it.name} ×${it.qty} — £${((it.price*it.qty)/100).toFixed(2)}`).join('<br>')}</div>
+        <div style="font-size:13px; margin:8px 0">${(o.items||[]).map(it=> `${it.name} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>${it.qty} — £${((it.price*it.qty)/100).toFixed(2)}`).join('<br>')}</div>
         <div style="display:flex; gap:8px; align-items:center; margin-top:8px">
           <strong>£${(o.total_pence/100).toFixed(2)}</strong>
           <select data-ostatus="${o.id}" style="margin-left:auto; background:#0f1210; border:1px solid var(--line); border-radius:10px; padding:6px 10px; color:var(--cream)">
@@ -248,7 +248,7 @@
       const id=b.dataset.osave; const sel = $(`[data-ostatus="${id}"]`); const status=sel.value;
       const msg=$(`[data-ostatus-msg="${id}"]`); msg.textContent='Saving…';
       const r=await fetch(`${SB_URL}/rest/v1/orders?id=eq.${id}`, {method:'PATCH', headers:{...headers, Prefer:'return=representation'}, body: JSON.stringify({status})});
-      if(r.ok) msg.textContent='Saved ✓'; else msg.textContent='Error';
+      if(r.ok) msg.textContent='Saved <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg>'; else msg.textContent='Error';
     }));
   }
 

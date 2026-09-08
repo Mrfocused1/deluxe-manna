@@ -12,7 +12,7 @@
     list.innerHTML = cart.map(it=>`
       <div class="cart-item">
         <img src="${it.image||'assets/logo.png'}" alt="">
-        <div><h4>${it.name}</h4><p>£${(it.price/100).toFixed(2)} × ${it.qty}</p></div>
+        <div><h4>${it.name}</h4><p>£${(it.price/100).toFixed(2)} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg> ${it.qty}</p></div>
         <div class="cart-item-price">£${((it.price*it.qty)/100).toFixed(2)}</div>
       </div>
     `).join('');

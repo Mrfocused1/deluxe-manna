@@ -43,16 +43,16 @@
         <img src="${it.image||'assets/logo.png'}" alt="">
         <div>
           <h4>${it.name}</h4>
-          <p>${currency(it.price)} × ${it.qty}</p>
+          <p>${currency(it.price)} <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg> ${it.qty}</p>
           <div class="cart-qty">
-            <button type="button" data-qty="-1" aria-label="Decrease">−</button>
+            <button type="button" data-qty="-1" aria-label="Decrease"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
             <span>${it.qty}</span>
             <button type="button" data-qty="1" aria-label="Increase">+</button>
           </div>
         </div>
         <div style="text-align:right">
           <div class="cart-item-price">${currency(it.price*it.qty)}</div>
-          <button class="cart-remove" type="button" data-remove aria-label="Remove">×</button>
+          <button class="cart-remove" type="button" data-remove aria-label="Remove"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
         </div>
       </div>
     `).join('');
