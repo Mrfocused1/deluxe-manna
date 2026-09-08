@@ -1,0 +1,88 @@
+<main id="main-content">
+  <section class="ct-hero page-hero container" aria-labelledby="contact-title">
+    <div class="ct-hero-copy">
+      <p class="eyebrow" data-hero-item>CONTACT DELUXE MANNA</p>
+      <h1 id="contact-title" data-hero-item>It starts<br>with <em>hello.</em></h1>
+      <p class="ct-lead" data-hero-item>A table for two. A reason to celebrate.<br>Or a little something on your mind.</p>
+      <div class="ct-hero-actions" data-hero-item>
+        <a class="button" href="#contact-form">Leave a message <span aria-hidden="true">↗</span></a>
+        <a class="ct-mail-link" href="mailto:hello@deluxemanna.com">hello@deluxemanna.com</a>
+      </div>
+      <p class="ct-hero-signature" data-hero-item>GOOD FOOD. GREAT COMPANY.</p>
+    </div>
+    <figure class="ct-hero-photo" data-hero-item>
+      <img src="assets/contact-table.png" width="1242" height="1541" alt="Congolese dishes, wine and gold cutlery on a marble table beside blue velvet seating at Deluxe Manna" fetchpriority="high" data-parallax>
+      <figcaption><span>A PLACE AT OUR TABLE</span><span>Make yourself<br><em>at home.</em></span></figcaption>
+      <span class="ct-photo-mark" aria-hidden="true">DM</span>
+    </figure>
+  </section>
+
+  <section class="ct-paths container" aria-label="How can we help?" data-reveal>
+    <a class="ct-path" href="index.html#booking">
+      <span class="ct-path-number">01</span>
+      <div><h2>A table for you.</h2><p>Make your next meal a moment.</p></div>
+      <span class="ct-path-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="ct-path" href="catering.html#enquire">
+      <span class="ct-path-number">02</span>
+      <div><h2>Something to celebrate.</h2><p>Bring your favourite people together.</p></div>
+      <span class="ct-path-arrow" aria-hidden="true">↗</span>
+    </a>
+    <a class="ct-path" href="#contact-form">
+      <span class="ct-path-number">03</span>
+      <div><h2>Just say hello.</h2><p>Questions, ideas or a little feedback.</p></div>
+      <span class="ct-path-arrow" aria-hidden="true">↗</span>
+    </a>
+  </section>
+
+  <section class="ct-enquiry container" id="message" aria-labelledby="message-title">
+    <div class="ct-enquiry-copy" data-reveal>
+      <p class="eyebrow">WE’RE ALL EARS</p>
+      <h2 class="section-heading" id="message-title">Let’s make<br>a <em>connection.</em></h2>
+      <p>Tell us what you have in mind. From your first visit to your next big occasion, it starts with a conversation.</p>
+      <div class="ct-faq" aria-label="A few useful things to know">
+        <p class="ct-faq-label">BEFORE YOU SAY HELLO</p>
+        <details>
+          <summary>Planning a meal with us? <span aria-hidden="true">+</span></summary>
+          <p>Include your preferred date, time and number of guests. You can also start with our <a href="index.html#booking">table enquiry</a>. Your booking is confirmed once the team gets back to you.</p>
+        </details>
+        <details>
+          <summary>Bringing a bigger group? <span aria-hidden="true">+</span></summary>
+          <p>For a celebration, private event or catering, tell us your date, guest numbers and what you’re imagining. Explore <a href="catering.html">catering &amp; events</a> for a little inspiration.</p>
+        </details>
+        <details>
+          <summary>Dietary requirements or allergies? <span aria-hidden="true">+</span></summary>
+          <p>Please speak with the team before ordering so they can advise on ingredients and whether your requirements can be accommodated.</p>
+        </details>
+      </div>
+    </div>
+
+    <form class="ct-form" id="contact-form" data-reveal>
+      <fieldset class="ct-topics">
+        <legend>What’s on your mind?</legend>
+        <div class="ct-topic-options">
+          <label><input type="radio" name="subject" value="General enquiry" checked><span>Just saying hello</span></label>
+          <label><input type="radio" name="subject" value="Dining enquiry"><span>Dining with us</span></label>
+          <label><input type="radio" name="subject" value="Catering & events"><span>Catering &amp; events</span></label>
+          <label><input type="radio" name="subject" value="Feedback"><span>Feedback</span></label>
+        </div>
+      </fieldset>
+      <div class="ct-form-row">
+        <label for="ct-name">Your name<input id="ct-name" name="name" autocomplete="name" required maxlength="120" placeholder="Full name"></label>
+        <label for="ct-email">Email address<input id="ct-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="200" placeholder="you@example.com"></label>
+      </div>
+      <label class="ct-message-label" for="ct-message">Your message <span class="ct-character-count" aria-hidden="true">0 / 3000</span></label>
+      <textarea id="ct-message" name="message" rows="5" required maxlength="3000" placeholder="Tell us a little more…"></textarea>
+      <div class="ct-submit-row">
+        <p>We’ll prepare a draft in your email app.<br>Review your message and send it there.</p>
+        <button class="button" type="submit">Open email draft <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="ct-form-result" role="status" hidden>
+        <p>Your draft is ready to open in your email app. Review and send it there. If it doesn’t open, email <a href="mailto:hello@deluxemanna.com">hello@deluxemanna.com</a> directly.</p>
+        <button type="button" class="ct-copy-message">Copy my message <span aria-hidden="true">↗</span></button>
+        <span class="ct-copy-status"></span>
+        <textarea class="ct-copy-fallback" readonly aria-label="Your email draft" hidden></textarea>
+      </div>
+    </form>
+  </section>
+</main>

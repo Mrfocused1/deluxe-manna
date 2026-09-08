@@ -1,0 +1,7 @@
+/* Classical Roman capitals echo the supplied Deluxe Manna wordmark. */
+.home-page .hero h1{font-family:'Cinzel',Georgia,serif;font-weight:400;font-size:clamp(43px,7.4svh,78px);line-height:1.05;letter-spacing:-1.5px;color:#eee3c9}
+.home-page .hero h1>span{display:block;font-variant:small-caps}
+.home-page .hero h1 b{font-weight:400;font-size:1.27em}
+.home-page .top .logo{width:86px;height:66px;filter:brightness(0) saturate(100%) invert(79%) sepia(39%) saturate(664%) hue-rotate(355deg) brightness(105%) contrast(94%);}
+@media(min-width:800px){.home-page .hero h1{font-size:clamp(65px,10svh,108px)}.home-page .top .logo{width:100px;height:76px}}
+@media(max-height:680px){.home-page .hero h1{font-size:clamp(40px,7.3svh,57px)}}
