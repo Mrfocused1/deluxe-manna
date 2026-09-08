@@ -1,0 +1,46 @@
+/* Voice agent — phone icon + panel */
+.voice-phone{
+  position:fixed; right:22px; bottom:22px; z-index:160;
+  width:58px; height:58px; border-radius:50%; border:0;
+  background:var(--gold); color:#111410; display:grid; place-items:center;
+  box-shadow:0 8px 32px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.08) inset;
+  cursor:pointer; transition:transform .2s, box-shadow .2s;
+}
+.voice-phone:hover{transform:scale(1.06); box-shadow:0 12px 36px rgba(0,0,0,.45)}
+.voice-phone svg{width:26px; height:26px}
+.voice-phone.pulse{animation:voice-pulse 1.6s infinite}
+@keyframes voice-pulse{0%{box-shadow:0 0 0 0 rgba(206,176,116,.5)}70%{box-shadow:0 0 0 14px rgba(206,176,116,0)}100%{box-shadow:0 0 0 0 rgba(206,176,116,0)}}
+
+.voice-panel{
+  position:fixed; right:22px; bottom:90px; z-index:160; width:min(380px, calc(100vw - 24px));
+  background:var(--surface); border:1px solid var(--line); border-radius:18px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5); overflow:hidden;
+  transform:translateY(12px) scale(.98); opacity:0; pointer-events:none; transition:transform .3s var(--ease), opacity .3s;
+}
+.voice-panel.open{transform:translateY(0) scale(1); opacity:1; pointer-events:auto}
+.voice-head{padding:16px 18px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between}
+.voice-head h3{font-family:var(--serif); font-size:18px; margin:0}
+.voice-head h3 em{color:var(--gold)}
+.voice-status{font:600 10px var(--sans); letter-spacing:.12em; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:8px}
+.voice-dot{width:8px; height:8px; border-radius:50%; background:#ff3b30; opacity:.5}
+.voice-dot.listening{background:#34c759; opacity:1; box-shadow:0 0 0 6px rgba(52,199,89,.2); animation:voice-breathe 1s infinite}
+@keyframes voice-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.voice-body{padding:16px 18px}
+.voice-transcript{min-height:52px; padding:12px; border-radius:12px; background:rgba(255,255,255,.04); border:1px solid var(--line); font-size:13px; color:var(--cream)}
+.voice-transcript em{color:var(--muted); font-style:normal}
+.voice-reply{margin-top:10px; font-size:13px; color:var(--muted); min-height:20px}
+.voice-cart-preview{margin-top:12px; border-top:1px solid var(--line); padding-top:12px}
+.voice-cart-preview h4{font:600 11px var(--sans); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:0 0 8px}
+.voice-actions{display:flex; gap:8px; margin-top:14px}
+.voice-actions .btn{flex:1; justify-content:center}
+.voice_wave{display:flex; gap:3px; align-items:center; height:22px; margin-top:8px}
+.voice_wave span{width:3px; height:6px; background:var(--gold); border-radius:2px; animation:wave 1s infinite ease-in-out}
+.voice_wave span:nth-child(2){animation-delay:.1s}
+.voice_wave span:nth-child(3){animation-delay:.2s}
+.voice_wave span:nth-child(4){animation-delay:.3s}
+@keyframes wave{0%,100%{height:6px; opacity:.6}50%{height:18px; opacity:1}}
+.voice-panel[hidden]{display:block; visibility:hidden}
+@media(max-width:760px){
+  .voice-phone{right:16px; bottom:108px}
+  .voice-panel{right:12px; left:12px; width:auto; bottom:168px}
+}
