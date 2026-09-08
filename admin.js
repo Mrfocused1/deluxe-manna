@@ -163,7 +163,7 @@
               <div class="field" style="margin:0"><label>Name</label><input data-mfield="name" data-id="${r.id}" value="${escapeAttr(r.name)}"></div>
               <div class="grid2"><div class="field"><label>Price (£)</label><input type="number" step="0.01" data-mfield="price" data-id="${r.id}" value="${(r.price_pence/100).toFixed(2)}"></div><div class="field"><label>Category</label><input data-mfield="category" data-id="${r.id}" value="${escapeAttr(r.category)}"></div></div>
               <div class="field"><label>Description</label><textarea rows="2" data-mfield="description" data-id="${r.id}">${escapeHtml(r.description||'')}</textarea></div>
-              <div class="field"><label>Image URL</label><input data-mfield="image_url" data-id="${r.id}" value="${escapeAttr(r.image_url||'')}"></div>
+              <div class="field"><label>Image</label><input data-mfield="image_url" data-id="${r.id}" value="${escapeAttr(r.image_url||'')}" placeholder="assets/menu/... or https://..."><input type="file" accept="image/*" data-mfile="${r.id}" style="margin-top:8px"></div>
               <div style="display:flex; gap:8px; flex-wrap:wrap">
                 <label style="font-size:12px"><input type="checkbox" data-mfield="available" data-id="${r.id}" ${r.available?'checked':''}> Available</label>
                 <button class="btn btn-gold" data-msave="${r.id}">Save</button>
@@ -176,13 +176,29 @@
       `).join('');
       grid.querySelectorAll('[data-msave]').forEach(b=> b.addEventListener('click', ()=> saveMenu(b.dataset.msave)));
       grid.querySelectorAll('[data-mdel]').forEach(b=> b.addEventListener('click', ()=> delMenu(b.dataset.mdel)));
+      grid.querySelectorAll('[data-mfile]').forEach(inp=> inp.addEventListener('change', async (e)=>{
+        const file=e.target.files[0]; if(!file) return;
+        const id=e.target.dataset.mfile;
+        const status=$(`[data-mstatus="${id}"]`);
+        status.textContent='Uploading…';
+        try{
+          const ext=file.name.split('.').pop();
+          const path=`menu/${id}-${Date.now()}.${ext}`;
+          const up=await fetch(`${SB_URL}/storage/v1/object/site-media/${path}`, {method:'POST', headers:{apikey:SB_ANON, Authorization:'Bearer '+SB_ANON, 'x-upsert':'true'}, body:file});
+          if(!up.ok) throw new Error(await up.text());
+          const url=`${SB_URL}/storage/v1/object/public/site-media/${path}`;
+          $(`[data-mfield="image_url"][data-id="${id}"]`).value=url;
+          const img=e.target.closest('.card')?.querySelector('img'); if(img) img.src=url;
+          status.textContent='Uploaded — click Save';
+        }catch(err){ status.textContent='Upload failed: '+err.message; }
+      }));
     }
     search.addEventListener('input', ()=> draw(search.value));
     $('#menu-add').addEventListener('click', async ()=>{
       const id = Date.now().toString();
       const newRow = {id, category:'Starters', name:'New dish', description:'', price_pence:899, image_url:'', available:true, sort_order: menuRows.length};
       const r = await fetch(`${SB_URL}/rest/v1/menu_items`, {method:'POST', headers:{...headers, Prefer:'return=representation'}, body: JSON.stringify(newRow)});
-      if(r.ok){ const j=await r.json(); menuRows.push(j[0]); renderNav(); draw(search.value); }
+      if(r.ok){ const j=await r.json(); menuRows.push(j[0]); renderNav(); draw(search.value); try{localStorage.setItem('dm-menu-bump',Date.now().toString());}catch{} }
     });
     draw();
   }
@@ -197,13 +213,13 @@
     const image_url = $(`[data-mfield="image_url"][data-id="${id}"]`).value.trim();
     const available = $(`[data-mfield="available"][data-id="${id}"]`).checked;
     const r = await fetch(`${SB_URL}/rest/v1/menu_items?id=eq.${encodeURIComponent(id)}`, {method:'PATCH', headers:{...headers, Prefer:'return=representation'}, body: JSON.stringify({name, price_pence:price, category, description, image_url: image_url||null, available, updated_at: new Date().toISOString()})});
-    if(r.ok){ status.textContent='Saved ✓'; setTimeout(()=>status.textContent='',2000); const row=menuRows.find(x=>x.id===id); Object.assign(row,{name, price_pence:price, category, description, image_url, available}); }
+    if(r.ok){ status.textContent='Saved ✓'; setTimeout(()=>status.textContent='',2000); const row=menuRows.find(x=>x.id===id); Object.assign(row,{name, price_pence:price, category, description, image_url, available}); try{localStorage.setItem('dm-menu-bump',Date.now().toString());}catch{} }
     else status.textContent='Error '+(await r.text()).slice(0,120);
   }
   async function delMenu(id){
     if(!confirm('Delete this dish?')) return;
     const r = await fetch(`${SB_URL}/rest/v1/menu_items?id=eq.${encodeURIComponent(id)}`, {method:'DELETE', headers});
-    if(r.ok){ menuRows=menuRows.filter(x=>x.id!==id); renderNav(); document.querySelector(`[data-msave="${id}"]`)?.closest('.card')?.remove(); }
+    if(r.ok){ menuRows=menuRows.filter(x=>x.id!==id); renderNav(); document.querySelector(`[data-msave="${id}"]`)?.closest('.card')?.remove(); try{localStorage.setItem('dm-menu-bump',Date.now().toString());}catch{} }
   }
 
   function renderOrders(){
