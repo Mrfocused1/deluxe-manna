@@ -35,14 +35,35 @@
     if(wave) wave.hidden = !listeningState;
   }
 
+  let audioCtx = null;
+  function unlockAudio(){
+    try{
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if(AC){
+        if(!audioCtx) audioCtx = new AC();
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+      }
+      // unlock via silent audio
+      const a = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=');
+      a.play().catch(()=>{});
+      if('speechSynthesis' in window){
+        const u = new SpeechSynthesisUtterance('');
+        speechSynthesis.speak(u);
+        speechSynthesis.cancel();
+      }
+    }catch{}
+  }
+
   function showPanel(){
     panel?.classList.add('open');
     panel?.removeAttribute('hidden');
     btn?.classList.add('pulse');
+    unlockAudio();
     setStatus('Listening…', true);
     // auto-listen whole time — no need to tap again
-    setTimeout(()=> startListening(), 600);
-    speak("Hello, welcome to Deluxe Manna. I'm your receptionist. What would you like to order today? You can say, for example, two beef skewers and a puff puffs.");
+    setTimeout(()=> startListening(), 500);
+    // speak after a tick so audio is unlocked
+    setTimeout(()=> speak("Hello, welcome to Deluxe Manna. I'm your receptionist. What would you like to order today? You can say, for example, two beef skewers and a puff puffs."), 200);
   }
   function hidePanel(){
     panel?.classList.remove('open');
@@ -61,6 +82,7 @@
   async function speak(text){
     if(!text) return;
     replyEl && (replyEl.textContent = text);
+    stopListening();
     // Try Cartesia
     try{
       const r = await fetch('/api/tts', {
@@ -75,21 +97,41 @@
         audio = new Audio(url);
         speaking = true;
         setStatus('Speaking…', false);
-        audio.onended = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 500); };
-        await audio.play();
-        return;
+        audio.onended = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 600); URL.revokeObjectURL(url); };
+        audio.onerror = ()=>{ fallbackSpeak(text); };
+        try{
+          await audio.play();
+          return;
+        }catch(err){
+          // autoplay blocked — fallback
+          fallbackSpeak(text);
+          return;
+        }
       }
       throw new Error('TTS failed '+r.status);
     }catch(e){
-      // fallback to browser speech
-      if('speechSynthesis' in window){
-        speechSynthesis.cancel();
-        const u = new SpeechSynthesisUtterance(text);
-        u.rate = 1; u.pitch = 1;
-        speaking = true; setStatus('Speaking…', false);
-        u.onend = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 500); };
-        speechSynthesis.speak(u);
-      }
+      fallbackSpeak(text);
+    }
+  }
+  function fallbackSpeak(text){
+    if('speechSynthesis' in window){
+      try{ speechSynthesis.cancel(); }catch{}
+      const u = new SpeechSynthesisUtterance(text);
+      u.rate = 1; u.pitch = 1; u.volume = 1;
+      // pick English voice if available
+      const voices = speechSynthesis.getVoices();
+      const en = voices.find(v=> v.lang.startsWith('en-GB')||v.lang.startsWith('en-'));
+      if(en) u.voice = en;
+      speaking = true; setStatus('Speaking…', false);
+      u.onend = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 600); };
+      u.onerror = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 600); };
+      speechSynthesis.speak(u);
+      // iOS needs resume
+      if(audioCtx && audioCtx.state==='suspended') audioCtx.resume();
+    } else {
+      speaking=false;
+      setStatus('Listening…', true);
+      if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 600);
     }
   }
   function stopSpeaking(){
@@ -114,9 +156,9 @@
     rec.onstart = ()=>{ listening=true; setStatus('Listening…', true); transcriptEl && (transcriptEl.innerHTML='<em>Listening…</em>'); };
     rec.onresult = (e)=>{
       const txt = Array.from(e.results).map(r=> r[0].transcript).join('');
-      const isFinal = e.results[0].isFinal;
+      const isFinal = e.results[e.results.length-1].isFinal;
       if(transcriptEl) transcriptEl.textContent = txt;
-      if(isFinal) handleTranscript(txt);
+      if(isFinal && txt.trim()) handleTranscript(txt);
     };
     rec.onerror = (e)=>{ listening=false; setStatus('Error: '+e.error, false); };
     rec.onend = ()=>{
