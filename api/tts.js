@@ -29,7 +29,7 @@ export default async function handler(req, res){
       body: JSON.stringify({
         model_id: 'sonic-3.5',
         transcript,
-        voice: { mode: 'id', id: '79a125e8-cff6-4d48-a8a0-4d3b5e3d8a6c' },
+        voice: { mode: 'id', id: 'db6b0ed5-d5d3-463d-ae85-518a07d3c2b4' },
         output_format: { container: 'wav', encoding: 'pcm_s16le', sample_rate: 24000 }
       })
     });
