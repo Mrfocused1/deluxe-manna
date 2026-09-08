@@ -1,0 +1,49 @@
+:root{--bg:#0f1210;--panel:#171a17;--card:#1e211e;--line:rgba(255,255,255,.08);--muted:#9aa09a;--gold:#ceb074;--cream:#f3eee3;--radius:14px}
+*{box-sizing:border-box}html,body{margin:0;min-height:100vh;background:var(--bg);color:var(--cream);font-family:'DM Sans',system-ui,sans-serif}
+a{color:inherit}
+.admin-shell{display:grid; grid-template-columns:260px 1fr; min-height:100vh}
+.admin-nav{background:#111410; border-right:1px solid var(--line); padding:20px 14px; position:sticky; top:0; height:100vh; overflow:auto}
+.admin-brand{display:flex; align-items:center; gap:10px; font-family:'Cinzel',serif; font-size:16px; letter-spacing:-.02em; margin-bottom:22px}
+.admin-brand img{width:32px; height:24px; object-fit:contain; filter:brightness(0) invert(1)}
+.admin-nav h3{font:600 10px/1 var(--sans); letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin:18px 0 8px}
+.admin-nav button{width:100%; text-align:left; padding:10px 12px; border-radius:10px; border:1px solid transparent; background:transparent; color:var(--muted); font-size:13px; cursor:pointer}
+.admin-nav button.active{ background:rgba(206,176,116,.12); border-color:rgba(206,176,116,.2); color:var(--cream)}
+.admin-nav button:hover{background:rgba(255,255,255,.04); color:var(--cream)}
+.admin-main{padding:28px 28px 48px}
+.admin-top{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:18px}
+.admin-top h1{font-family:'Cormorant Garamond',serif; font-size:32px; letter-spacing:-.03em; margin:0}
+.admin-top h1 em{color:var(--gold)}
+.admin-actions{display:flex; gap:10px}
+.btn{ min-height:38px; padding:0 16px; border-radius:100px; border:1px solid var(--line); background:var(--card); color:var(--cream); font-size:12px; cursor:pointer; display:inline-flex; align-items:center; gap:8px}
+.btn-gold{background:var(--gold); color:#111410; border-color:var(--gold)}
+.btn:hover{border-color:var(--gold)}
+.card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px; margin-bottom:14px}
+.card h3{margin:0 0 12px; font-size:14px; letter-spacing:-.01em}
+.card p.note{color:var(--muted); font-size:12px; margin:6px 0 0}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+.field{display:grid; gap:6px; margin-bottom:12px}
+.field label{font:500 11px var(--sans); letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+.field input,.field textarea,.field select{ width:100%; background:#0f1210; border:1px solid var(--line); border-radius:10px; padding:11px 12px; color:var(--cream); font-size:13px}
+.field textarea{resize:vertical; min-height:78px}
+.media-row{display:flex; gap:12px; align-items:center}
+.media-row img{width:72px; height:72px; object-fit:cover; border-radius:10px; border:1px solid var(--line); background:#0b0e0b}
+.media-row video{width:120px; height:72px; object-fit:cover; border-radius:10px; border:1px solid var(--line)}
+.badge{font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); border:1px solid rgba(206,176,116,.2); padding:4px 8px; border-radius:100px; background:rgba(206,176,116,.08)}
+.save-row{display:flex; gap:8px; align-items:center; margin-top:8px}
+.save-row .status{font-size:12px; color:var(--muted)}
+.orders{display:grid; gap:10px}
+.order{padding:14px; border:1px solid var(--line); border-radius:12px; background:rgba(255,255,255,.02)}
+.order h4{margin:0 0 6px; font-size:14px}
+.order small{color:var(--muted)}
+.login{max-width:420px; margin:12vh auto; padding:28px; border:1px solid var(--line); border-radius:18px; background:var(--panel); text-align:center}
+.login h2{font-family:'Cormorant Garamond',serif; font-size:28px; margin:0 0 8px}
+.login input{margin:14px 0; text-align:center}
+@media(max-width:900px){
+  .admin-shell{grid-template-columns:1fr}
+  .admin-nav{position:relative; height:auto; display:flex; gap:8px; overflow:auto; padding:12px}
+  .admin-nav h3{display:none}
+  .admin-brand{display:none}
+  .admin-nav button{white-space:nowrap; width:auto}
+  .admin-main{padding:18px}
+  .grid2{grid-template-columns:1fr}
+}

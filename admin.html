@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Deluxe Manna — Admin</title><link rel="icon" type="image/png" href="assets/logo.png"><link rel="stylesheet" href="site.css?v=5"><link rel="stylesheet" href="admin.css?v=5"></head><body>
+<div id="login-view" class="login">
+  <div class="admin-brand" style="justify-content:center; margin-bottom:12px"><img src="assets/logo.png" alt=""><span>Deluxe Manna<small style="display:block; font:500 8px DM Sans; letter-spacing:.2em; color:var(--gold)">CONGOLESE CUISINE</small></span></div>
+  <h2>Admin access</h2>
+  <p class="note">Enter password to manage site content. Changes save to Supabase and appear instantly — no GitHub.</p>
+  <form id="login-form"><input id="login-pass" type="password" placeholder="Password" required><button class="btn btn-gold" type="submit" style="width:100%">Enter</button><p id="login-err" style="color:#ff8a8a; font-size:12px; margin-top:8px"></p></form>
+  <p class="note">Default: <code>deluxe2026</code> — change in Supabase <code>site_content admin.password</code></p>
+</div>
+<div id="app-view" hidden>
+  <div class="admin-shell">
+    <nav class="admin-nav" id="admin-nav"></nav>
+    <main class="admin-main">
+      <div class="admin-top">
+        <h1 id="cat-title">Global</h1>
+        <div class="admin-actions">
+          <a class="btn" href="index.html" target="_blank">View site</a>
+          <button class="btn" id="logout">Logout</button>
+        </div>
+      </div>
+      <div id="admin-main"></div>
+      <p class="note" style="margin-top:18px">Tip: image/video uploads go to Supabase Storage <code>site-media</code> and are public. Save after editing text.</p>
+    </main>
+  </div>
+</div>
+<script src="admin.js?v=5"></script>
+</body></html>
