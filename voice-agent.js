@@ -39,8 +39,10 @@
     panel?.classList.add('open');
     panel?.removeAttribute('hidden');
     btn?.classList.add('pulse');
+    setStatus('Listening…', true);
+    // auto-listen whole time — no need to tap again
+    setTimeout(()=> startListening(), 600);
     speak("Hello, welcome to Deluxe Manna. I'm your receptionist. What would you like to order today? You can say, for example, two beef skewers and a puff puffs.");
-    setStatus('Ready — tap Talk', false);
   }
   function hidePanel(){
     panel?.classList.remove('open');
@@ -73,7 +75,7 @@
         audio = new Audio(url);
         speaking = true;
         setStatus('Speaking…', false);
-        audio.onended = ()=>{ speaking=false; setStatus('Ready — tap Talk', false); };
+        audio.onended = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 500); };
         await audio.play();
         return;
       }
@@ -85,7 +87,7 @@
         const u = new SpeechSynthesisUtterance(text);
         u.rate = 1; u.pitch = 1;
         speaking = true; setStatus('Speaking…', false);
-        u.onend = ()=>{ speaking=false; setStatus('Ready — tap Talk', false); };
+        u.onend = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 500); };
         speechSynthesis.speak(u);
       }
     }
@@ -107,7 +109,7 @@
     rec = new SR();
     rec.lang = 'en-GB';
     rec.interimResults = true;
-    rec.continuous = false;
+    rec.continuous = true;
     rec.maxAlternatives = 1;
     rec.onstart = ()=>{ listening=true; setStatus('Listening…', true); transcriptEl && (transcriptEl.innerHTML='<em>Listening…</em>'); };
     rec.onresult = (e)=>{
@@ -117,7 +119,16 @@
       if(isFinal) handleTranscript(txt);
     };
     rec.onerror = (e)=>{ listening=false; setStatus('Error: '+e.error, false); };
-    rec.onend = ()=>{ listening=false; if(transcriptEl && !transcriptEl.textContent) setStatus('Tap Talk to speak', false); else setStatus('Ready — tap Talk', false); };
+    rec.onend = ()=>{
+      listening=false;
+      setStatus('Listening…', true);
+      // keep listening whole time while panel open and not speaking
+      if(panel?.classList.contains('open') && !speaking){
+        try{ setTimeout(()=> rec.start(), 400); listening=true; }catch{}
+      } else {
+        setStatus('Ready', false);
+      }
+    };
     return rec;
   }
 
