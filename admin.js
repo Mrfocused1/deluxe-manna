@@ -30,13 +30,13 @@
     try{
       const r = await fetch(`${SB_URL}/rest/v1/site_content?select=value_text&key=eq.admin.password`, {headers});
       const j = await r.json();
-      const expected = j[0]?.value_text || 'deluxe2026';
+      const expected = j[0]?.value_text || 'Password';
       if(pass === expected){
         sessionStorage.setItem('dm-admin','1');
         showApp();
       } else loginErr.textContent='Incorrect password';
     }catch{
-      if(pass==='deluxe2026'){ sessionStorage.setItem('dm-admin','1'); showApp(); } else loginErr.textContent='Incorrect password';
+      if(pass==='Password'){ sessionStorage.setItem('dm-admin','1'); showApp(); } else loginErr.textContent='Incorrect password';
     }
   });
   $('#logout')?.addEventListener('click', ()=>{ sessionStorage.removeItem('dm-admin'); showLogin(); });
