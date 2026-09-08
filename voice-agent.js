@@ -78,37 +78,47 @@
   closeBtn?.addEventListener('click', hidePanel);
   document.querySelector('[data-voice-cart-open]')?.addEventListener('click', ()=>{ document.querySelector('.cart-drawer')?.classList.add('open'); document.querySelector('.cart-backdrop')?.classList.add('open'); document.body.style.overflow='hidden'; });
 
-  // TTS via Cartesia proxy with fallback to browser
+  // TTS via Cartesia proxy — same voice for intro and replies (Skylar), play via unlocked AudioContext so follow-ups aren't blocked
   async function speak(text){
     if(!text) return;
     replyEl && (replyEl.textContent = text);
     stopListening();
-    // Try Cartesia
     try{
       const r = await fetch('/api/tts', {
         method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ transcript: text })
       });
-      if(r.ok){
-        const buf = await r.arrayBuffer();
-        const blob = new Blob([buf], {type:'audio/wav'});
-        const url = URL.createObjectURL(blob);
-        stopSpeaking();
-        audio = new Audio(url);
-        speaking = true;
-        setStatus('Speaking…', false);
-        audio.onended = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 600); URL.revokeObjectURL(url); };
-        audio.onerror = ()=>{ fallbackSpeak(text); };
+      if(!r.ok) throw new Error('TTS failed '+r.status);
+      const buf = await r.arrayBuffer();
+      // try Web Audio (unlocked on phone tap) — keeps same Cartesia voice for every reply
+      if(audioCtx){
         try{
-          await audio.play();
+          if(audioCtx.state === 'suspended') await audioCtx.resume();
+          const decoded = await audioCtx.decodeAudioData(buf.slice(0));
+          stopSpeaking();
+          const src = audioCtx.createBufferSource();
+          src.buffer = decoded;
+          src.connect(audioCtx.destination);
+          speaking = true;
+          setStatus('Speaking…', false);
+          src.onended = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 600); };
+          src.start(0);
+          // keep reference to stop
+          audio = { _src: src, pause(){ try{src.stop();}catch{} }, _ctx: audioCtx };
           return;
-        }catch(err){
-          // autoplay blocked — fallback
-          fallbackSpeak(text);
-          return;
+        }catch(e){
+          // fall through to Audio element
         }
       }
-      throw new Error('TTS failed '+r.status);
+      const blob = new Blob([buf], {type:'audio/wav'});
+      const url = URL.createObjectURL(blob);
+      stopSpeaking();
+      audio = new Audio(url);
+      speaking = true;
+      setStatus('Speaking…', false);
+      audio.onended = ()=>{ speaking=false; setStatus('Listening…', true); if(panel?.classList.contains('open')) setTimeout(()=> startListening(), 600); URL.revokeObjectURL(url); };
+      audio.onerror = ()=>{ fallbackSpeak(text); };
+      try{ await audio.play(); return; }catch{ fallbackSpeak(text); return; }
     }catch(e){
       fallbackSpeak(text);
     }
