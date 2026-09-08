@@ -1,0 +1,21 @@
+.checkout-main{padding-top:110px}
+.checkout-hero{padding:24px 0 12px}
+.checkout-hero h1{font-family:var(--serif); font-size:clamp(36px,6vw,56px); letter-spacing:-.03em}
+.checkout-lead{max-width:640px; color:var(--muted); margin-top:10px}
+.checkout-layout{display:grid; grid-template-columns:1.1fr .9fr; gap:36px; padding:28px 0 60px}
+.checkout-basket, .checkout-form{border:1px solid var(--line); border-radius:18px; background:rgba(255,255,255,.02); padding:22px}
+.checkout-basket h2, .checkout-form h2{font-family:var(--serif); font-size:22px; margin-bottom:16px}
+.checkout-empty{text-align:center; padding:32px 0; color:var(--muted)}
+.checkout-totals{margin-top:16px; border-top:1px solid var(--line); padding-top:12px; font-size:13px}
+.checkout-totals div{display:flex; justify-content:space-between; margin-bottom:6px}
+.checkout-total{font-size:15px; font-weight:700; color:var(--cream)}
+.checkout-form label{display:block; margin-bottom:12px; font-size:12px; color:var(--muted)}
+.checkout-form input, .checkout-form textarea{margin-top:6px}
+.checkout-pay{display:grid; gap:8px; margin:14px 0}
+.checkout-pay label{color:var(--cream); font-size:13px; display:flex; gap:8px; align-items:center; margin:0}
+.checkout-success{grid-column:1/-1; text-align:center; padding:40px; border:1px solid var(--gold); border-radius:18px; background:rgba(206,176,116,.08)}
+#checkout-items .cart-item{border-radius:12px}
+@media(max-width:900px){
+  .checkout-layout{grid-template-columns:1fr}
+  .checkout-main{padding-top:90px}
+}

@@ -44,27 +44,23 @@
   }
   extendReel();
   window.addEventListener('resize', extendReel, { passive: true });
-  let visible = false, interacting = false, hovered = false, focused = false, frame = 0, last = 0, fraction = 0;
+  let visible = true, frame = 0, last = 0, fraction = 0;
   function cycleWidth() { return track.children[originals.length].offsetLeft - track.children[0].offsetLeft; }
   function tick(now) {
-    frame = 0;
-    if (!visible || document.hidden || reduced.matches || interacting || hovered || focused) { last = 0; return; }
+    frame = requestAnimationFrame(tick);
+    if (document.hidden || reduced.matches) { last = now; return; }
     if (last) {
       fraction += Math.min(now - last, 50) * .022;
       if (fraction >= 1) { const pixels = Math.floor(fraction); reel.scrollLeft += pixels; fraction -= pixels; }
       const width = cycleWidth();
       if (width > 0 && reel.scrollLeft >= width) reel.scrollLeft -= width;
     }
-    last = now; frame = requestAnimationFrame(tick);
+    last = now;
   }
-  function syncReel() { if (frame) cancelAnimationFrame(frame); frame = 0; last = 0; if (visible && !document.hidden && !reduced.matches && !interacting && !hovered && !focused) frame = requestAnimationFrame(tick); }
-  new IntersectionObserver(entries => { visible = entries[0].isIntersecting; syncReel(); }).observe(reel);
-  reel.addEventListener('pointerenter', event => { if (event.pointerType === 'mouse') { hovered = true; syncReel(); } });
-  reel.addEventListener('pointerleave', () => { hovered = false; syncReel(); });
-  reel.addEventListener('pointerdown', () => { interacting = true; syncReel(); }, { passive: true });
-  reel.addEventListener('wheel', () => { interacting = true; syncReel(); }, { passive: true });
-  reel.addEventListener('focusin', () => { focused = true; syncReel(); });
-  reel.addEventListener('focusout', () => { focused = false; syncReel(); });
+  function syncReel() { if (!frame) frame = requestAnimationFrame(tick); }
+  // Always scroll — ignore hover/focus/drag; only pause for reduced motion
+  new IntersectionObserver(entries => { visible = entries[0].isIntersecting; if(visible) syncReel(); }).observe(reel);
+  syncReel();
   document.addEventListener('visibilitychange', syncReel);
   reduced.addEventListener('change', syncReel);
 

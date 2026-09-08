@@ -1,0 +1,98 @@
+/* Cart — plus button, drawer, fly animation */
+.mv2-add{
+  position:absolute; top:14px; right:14px; z-index:2;
+  width:38px; height:38px; border-radius:50%; border:0;
+  background:var(--gold); color:var(--bg); display:grid; place-items:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.25); cursor:pointer; transition:transform .15s, background .2s, box-shadow .2s;
+}
+.mv2-add:hover{background:#e0c795; transform:scale(1.05)}
+.mv2-add:active{transform:scale(.92)}
+.mv2-add svg{width:18px; height:18px; stroke-width:1.8}
+.mv2-dish{position:relative}
+.mv2-dish.wiggle{animation:dm-wiggle .45s var(--ease)}
+@keyframes dm-wiggle{
+  0%{transform:rotate(0) scale(1)}
+  20%{transform:rotate(-0.8deg) scale(1.015)}
+  40%{transform:rotate(0.8deg) scale(1.015)}
+  70%{transform:rotate(-0.4deg) scale(1.01)}
+  100%{transform:rotate(0) scale(1)}
+}
+
+/* header cart */
+.cart-trigger{
+  position:relative; width:44px; height:44px; border-radius:50%; border:1px solid var(--line);
+  background:transparent; color:var(--cream); display:grid; place-items:center; flex-shrink:0;
+  transition:border-color .2s, background .2s;
+}
+.cart-trigger:hover{border-color:var(--gold); background:rgba(255,255,255,.04)}
+.cart-trigger svg{width:20px; height:20px}
+.cart-count{
+  position:absolute; top:-4px; right:-4px; min-width:20px; height:20px; padding:0 6px;
+  border-radius:10px; background:var(--gold); color:var(--bg); font:700 11px/20px var(--sans);
+  text-align:center; transform:scale(0); transition:transform .25s var(--ease);
+}
+.cart-count.has-items{transform:scale(1)}
+.cart-trigger.pulse{animation:cart-pulse .45s var(--ease)}
+@keyframes cart-pulse{0%{transform:scale(1)} 30%{transform:scale(1.12)} 100%{transform:scale(1)}}
+
+/* fly element */
+.cart-fly{
+  position:fixed; z-index:500; pointer-events:none; border-radius:12px; overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.4); will-change:transform, opacity;
+  transition:transform .85s cubic-bezier(.32,.72,0,1), opacity .85s ease;
+  opacity:.95;
+}
+.cart-fly.flying{opacity:0; transform:scale(.18)}
+
+/* drawer */
+.cart-backdrop{
+  position:fixed; inset:0; z-index:200; background:#080b08bb; backdrop-filter:blur(8px);
+  opacity:0; pointer-events:none; transition:opacity .3s;
+}
+.cart-backdrop.open{opacity:1; pointer-events:auto}
+.cart-drawer{
+  position:fixed; top:0; right:0; bottom:0; z-index:201; width:min(420px, 92vw);
+  background:var(--surface); border-left:1px solid var(--line); display:flex; flex-direction:column;
+  transform:translateX(100%); transition:transform .45s var(--ease); overflow:hidden;
+}
+.cart-drawer.open{transform:translateX(0)}
+.cart-drawer-head{
+  padding:28px 24px 20px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between;
+}
+.cart-drawer-head h2{font-family:var(--serif); font-size:26px; letter-spacing:-.02em}
+.cart-drawer-head h2 em{color:var(--gold)}
+.cart-close{width:36px; height:36px; border-radius:50%; border:1px solid var(--line); background:transparent; display:grid; place-items:center}
+.cart-drawer-body{flex:1; overflow:auto; padding:18px 24px}
+.cart-empty{padding:40px 0; text-align:center; color:var(--muted)}
+.cart-empty svg{margin:0 auto 16px; width:40px; height:40px; opacity:.5}
+.cart-items{display:grid; gap:14px}
+.cart-item{display:grid; grid-template-columns:64px 1fr auto; gap:14px; align-items:center; padding:12px; border:1px solid var(--line); border-radius:14px; background:rgba(255,255,255,.02)}
+.cart-item img{width:64px; height:64px; object-fit:cover; border-radius:10px}
+.cart-item h4{font:500 14px/1.3 var(--sans); color:var(--cream)}
+.cart-item p{font-size:12px; color:var(--muted)}
+.cart-item-price{font:600 13px var(--sans); color:var(--gold)}
+.cart-qty{display:flex; align-items:center; gap:8px; margin-top:6px}
+.cart-qty button{width:28px; height:28px; border-radius:50%; border:1px solid var(--line); background:transparent; display:grid; place-items:center; font-size:14px}
+.cart-qty span{min-width:22px; text-align:center; font-size:13px}
+.cart-remove{width:28px; height:28px; border:0; background:transparent; color:var(--muted)}
+.cart-drawer-foot{padding:20px 24px 24px; border-top:1px solid var(--line); background:rgba(0,0,0,.15)}
+.cart-totals{display:grid; gap:8px; margin-bottom:16px; font-size:13px}
+.cart-totals div{display:flex; justify-content:space-between}
+.cart-totals strong{font-size:16px; color:var(--cream)}
+.cart-checkout{width:100%}
+.cart-note{margin-top:10px; font-size:11px; color:var(--muted); text-align:center}
+
+/* dialog qty + add */
+.mv2-dialog-actions{display:flex; gap:12px; align-items:center; margin-top:18px}
+.mv2-qty{display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:100px; padding:6px}
+.mv2-qty-btn{width:32px; height:32px; border-radius:50%; border:0; background:rgba(255,255,255,.06); color:var(--cream)}
+.mv2-qty-value{min-width:28px; text-align:center; font-weight:600}
+.mv2-view-basket{display:inline-flex; align-items:center; gap:10px; padding:10px 16px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--cream); font-size:12px}
+.mv2-view-basket svg{width:16px; height:16px}
+.mv2-basket-count{min-width:20px; height:20px; padding:0 6px; border-radius:10px; background:var(--gold); color:var(--bg); font:700 11px/20px var(--sans); text-align:center}
+.mv2-basket-count:empty{display:none}
+
+@media(max-width:760px){
+  .mv2-add{width:36px; height:36px; top:10px; right:10px}
+  .cart-drawer{width:100vw}
+}

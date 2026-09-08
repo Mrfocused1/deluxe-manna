@@ -90,7 +90,7 @@
     document.getElementById('dish-dialog-category').textContent = item.category;
     document.getElementById('dish-dialog-title').textContent = item.name;
     document.getElementById('dish-dialog-price').textContent = `£${(item.price / 100).toFixed(2)}`;
-    document.getElementById('dish-dialog-description').textContent = item.description || 'Explore the available meal choices on Deliveroo.';
+    document.getElementById('dish-dialog-description').textContent = item.description || 'Freshly prepared to order.';
     document.getElementById('dish-dialog-availability').hidden = item.available;
     savedOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';

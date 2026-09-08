@@ -58,7 +58,7 @@
 .mv2-dish:hover .mv2-dish-photo img{transform:scale(1.07);filter:brightness(1.04)}
 .mv2-dish:hover .mv2-dish-photo>span,.mv2-dish:focus-within .mv2-dish-photo>span{opacity:1;transform:translateY(0)}
 .mv2-dish-no-photo{min-height:162px}
-.mv2-dish-no-photo:after{content:"↗";color:var(--gold);font-size:20px;padding-right:10px}
+.mv2-dish-no-photo:after{content:"";color:var(--gold);font-size:20px;padding-right:10px}
 .mv2-dish-meta{display:flex;flex-wrap:wrap;gap:7px;font:9px/1.4 var(--sans);color:var(--gold);margin-bottom:7px}
 .mv2-dish-meta:empty{display:none}.mv2-dish-tag:before{content:"•";padding-right:4px}.mv2-dish-unavailable{color:var(--muted)}
 .mv2-menu-note{border-top:1px solid var(--line);margin-top:8px;padding:28px 0 44px;display:flex;justify-content:space-between;gap:45px;align-items:start}
